@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            width: 250px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .setting-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .setting-container label {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .setting-container input[type="checkbox"] {
+            margin-left: 10px;
+            width: 40px;
+            height: 20px;
+        }
+
+        .setting-container select {
+            margin-left: 10px;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: border 0.3s;
+        }
+
+        .setting-container select:focus {
+            border-color: #4A90E2;
+        }
+
+        .save-btn {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background-color: #357ABD;
+        }
+
+        .reset-btn {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #D9534F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .reset-btn:hover {
+            background-color: #C9302C;
+        }
+
+        .status-text {
+            font-size: 14px;
+            color: #888;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Settings</h2>
+
+    <div class="setting-container">
+        <label>
+            <input type="checkbox" id="nudeModeToggle">
+            Enable Nude Mode
+        </label>
+        <label>
+            <input type="checkbox" id="enableBackgroundToggle">
+            Enable Background Image
+        </label>
+        <label for="defaultImageSelect">
+            <select id="defaultImageSelect">
+            </select>
+        </label>
+    </div>
+
+    <button class="save-btn" id="saveBtn">Save Settings</button>
+    <button class="reset-btn" id="resetBtn">Reset to Default</button>
+
+    <p class="status-text" id="statusText"></p>
+
+    <script src="popup.js"></script>
+</body>
+</html>

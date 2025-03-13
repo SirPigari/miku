@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mikuuuu :3">
+    <meta name="keywords" content="search, google, stylish, new tab, homepage, miku, :3, hatsune">
+    <meta name="author" content="SirPigari">
+    <meta property="og:title" content="New tab">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Mikuuuu :3">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:url" content="https://github.com/SirPigari/">
+    <title>New tab</title>
+
+    <link rel="icon" href="icon.png" type="image/png">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">ň
+
+    <script src="new-tab.js" defer></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        #logo {
+            cursor: pointer;
+            width: 650px;
+            margin-bottom: -2px;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: -300px;
+        }
+
+        .search-bar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-bar {
+            width: 800px;
+            height: 28px;
+            padding: 10px 15px 10px 35px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-bar:focus {
+            border-color: #4A90E2;
+        }
+
+        .search-bar::placeholder {
+            color: #888;
+        }
+
+        .search-bar-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .search-bar-container {
+            position: relative;
+        }
+
+        button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        datalist {
+            width: 800px;
+            position: absolute;
+            top: 45px;
+            z-index: 1000;
+        }
+    
+        datalist option {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    
+        datalist option:hover {
+            background-color: #e4e4e4;
+        }
+
+        .shortcuts-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 1;
+        }
+        
+        .shortcut {
+            width: 100px;
+            height: 100px;
+            background-color: #ebebeb;
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            position: relative;
+            transition: box-shadow 0.15s ease-in-out, transform 0.15s ease-in-out;
+            border: 1px solid #f7f7f7;
+        }
+
+        .shortcut:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .shortcut img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .shortcut-options {
+            position: absolute;
+            flex-direction: column;
+            top: 5px;
+            right: 5px;
+            display: flex;
+            gap: 3px;
+        }
+        
+        .shortcut-options button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #888;
+            padding: 3px;
+            transition: 0.2s;
+        }
+        
+        .shortcut-options button:hover {
+            color: #333;
+        }
+        
+        .shortcut-options .delete-button i {
+            font-size: 14px;
+        }
+
+        .shortcut-options .edit-button i {
+            font-size: 14px;
+        }
+        
+        .add-button {
+            font-size: 35px;
+            font-weight: bold;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #f3f3f3;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 450px;
+            height: auto;
+            border: 1px solid #333;
+        }
+        
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            border-radius: 10px;
+            box-shadow: none;
+            background-color: #f9f9f9;
+        }
+        
+        .modal-buttons button {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 8px 16px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .modal-buttons button:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content input {
+            width: 93%;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            outline: none;
+            transition: 0.3s;
+            background-color: #f9f9f9;
+        }
+
+        .modal-content input:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content input:focus {
+            border-color: #4A90E2;
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+        }
+
+        .modal-content input::placeholder {
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <a href="https://www.google.com/" target="_blank" id="logo-link">
+            <img id="logo" src="logo.png" alt="Logo" title="Mikuuuuu <3">
+        </a>
+    </div>    
+
+    <div class="search-bar-container">
+        <form action="https://www.google.com/search" method="get" target="_self" id="searchForm">
+            <input type="text" name="q" class="search-bar" placeholder="Search Google..." autocomplete="off" required>
+            <button type="submit" class="search-bar-icon">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+
+    <div class="shortcuts-container"></div>
+
+    <div id="shortcut-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Add Shortcut</h2>
+            <label>Name:</label>
+            <input type="text" id="shortcut-name" autocomplete="off">
+            <label>URL:</label>
+            <input type="text" id="shortcut-url" autocomplete="off">
+            <div class="modal-buttons">
+                <button id="save-shortcut">Save</button>
+                <button id="cancel-shortcut">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Delete shortcut?</h2>
+            <label>Are you sure you want to delete this shortcut?</label>
+            <div class="modal-buttons">
+                <button id="confirm-delete">Delete</button>
+                <button id="cancel-delete">Cancel</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
