@@ -156,14 +156,14 @@
             border: none;
             cursor: pointer;
             font-size: 14px;
-            color: #888;
+            color: rgba(136, 136, 136, 1);
             padding: 3px;
-            transition: 0.2s;
+            transition: color 0.2s ease-in-out;
         }
         
         .shortcut-options button:hover {
-            color: #333;
-        }
+            color: rgba(51, 51, 51, 1);
+        }        
         
         .shortcut-options .delete-button i {
             font-size: 14px;
@@ -253,6 +253,27 @@
             color: #888;
             font-style: italic;
         }
+
+        #about-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(19, 122, 127, 0.5);
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+        
+        #about-button:hover {
+            background-color: rgba(19, 122, 127, 0.8);
+        }        
     </style>
 </head>
 <body>
@@ -297,5 +318,7 @@
             </div>
         </div>
     </div>
+
+    <a href="https://github.com/SirPigari/miku" id="about-button" target="_blank">About</a>
 </body>
 </html>

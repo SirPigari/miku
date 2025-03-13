@@ -5,11 +5,22 @@
     "description": ":3",
     "permissions": [
       "tabs",
-      "storage"
+      "storage",
+      "activeTab",
+      "webNavigation",
+      "webRequest",
+      "scripting"
     ],
     "background": {
       "service_worker": "background.js"
     },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "run_at": "document_end"
+      }
+    ],
     "action": {
       "default_popup": "popup.html",
       "default_icon": "icon.png"
@@ -23,8 +34,7 @@
       "128": "icon.png"
     },
     "host_permissions": [
-      "http://*/*",
-      "https://*/*"
+      "<all_urls>"
     ]
   }
   
