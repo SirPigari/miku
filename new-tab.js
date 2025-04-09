@@ -1,0 +1,194 @@
+window.onload = function() {
+    const nudeMode = localStorage.getItem('nudeMode') === 'true';
+    let imageCategory = nudeMode ? 'nude' : 'normal';
+    let imageCount = 4;
+    let randomImageIndex = Math.floor(Math.random() * imageCount) + 1;
+
+    loadShortcuts();
+    
+    let backgroundImage = `./miku_${imageCategory}_${randomImageIndex}.png`;
+    if (localStorage.getItem('backgroundEnabled') !== 'true') {
+        const defaultImage = localStorage.getItem('defaultImage') || 'miku_normal_4.png';
+
+        if (defaultImage === 'none') {
+            document.body.style.backgroundImage = 'none';
+            return;
+        }
+        backgroundImage = `./${defaultImage}`;
+    }
+    
+
+    document.body.style.backgroundImage = `url(${backgroundImage})`;
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('searchForm');
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    submitButton.addEventListener('mouseover', function() {
+        const query = document.querySelector('input[name="q"]').value.trim();
+
+        if (!query) {
+            submitButton.style.cursor = 'default';
+        } else {
+            submitButton.style.cursor = 'pointer';
+        }
+    });
+
+    form.addEventListener('submit', function(event) {
+        const query = document.querySelector('input[name="q"]').value.trim();
+
+        if (!query) {
+            event.preventDefault();
+        }
+    });
+
+    submitButton.addEventListener('click', function(event) {
+        const query = document.querySelector('input[name="q"]').value.trim();
+
+        if (!query) {
+            event.preventDefault();
+        }
+    });
+});
+
+
+function loadShortcuts() {
+    const shortcutsContainer = document.querySelector('.shortcuts-container');
+    shortcutsContainer.innerHTML = '';
+    let shortcuts = JSON.parse(localStorage.getItem('shortcuts')) || [];
+    
+    shortcuts.forEach((shortcut, index) => {
+        addShortcutElement(shortcut, index);
+    });
+    
+    if (shortcuts.length < 10) {
+        addAddButton();
+    }
+}
+
+function addShortcutElement(shortcut, index) {
+    const shortcutsContainer = document.querySelector('.shortcuts-container');
+    const shortcutElement = document.createElement('div');
+    shortcutElement.classList.add('shortcut');
+
+    shortcutElement.title = shortcut.url;
+    shortcutElement.innerHTML = `
+        <a href="${shortcut.url}" target="_self"><img src="https://www.google.com/s2/favicons?domain=${shortcut.url}&sz=256" class="shortcut-img"></a>
+        <span>${shortcut.name}</span>
+        <div class="shortcut-options">
+            <button class="delete-button">
+                <i class="fas fa-trash"></i>
+            </button>
+            <button class="edit-button">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+    `;
+
+    const deleteButton = shortcutElement.querySelector('.delete-button');
+    deleteButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        openConfirmationModal(index);
+    });
+
+    const editButton = shortcutElement.querySelector('.edit-button');
+    editButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        openShortcutModal(index, event);
+    });
+
+    shortcutsContainer.appendChild(shortcutElement);
+}
+
+function openConfirmationModal(index) {
+    const modal = document.getElementById('confirmation-modal');
+    const confirmButton = document.getElementById('confirm-delete');
+    const cancelButton = document.getElementById('cancel-delete');
+
+    modal.style.display = 'block';
+
+    confirmButton.onclick = () => {
+        deleteShortcut(index);
+        modal.style.display = 'none';
+    };
+
+    cancelButton.onclick = () => {
+        modal.style.display = 'none';
+    };
+}
+
+function addAddButton() {
+    const shortcutsContainer = document.querySelector('.shortcuts-container');
+    const addButton = document.createElement('div');
+    addButton.classList.add('shortcut', 'add-button');
+    addButton.innerHTML = '+';
+    addButton.onclick = () => openShortcutModal(null);
+    shortcutsContainer.appendChild(addButton);
+}
+
+function openShortcutModal(index) {
+    let shortcuts = JSON.parse(localStorage.getItem('shortcuts')) || [];
+    let modal = document.getElementById('shortcut-modal');
+    let nameInput = document.getElementById('shortcut-name');
+    let urlInput = document.getElementById('shortcut-url');
+    let saveButton = document.getElementById('save-shortcut');
+    
+    if (index !== null) {
+        document.getElementById('modal-title').innerText = 'Edit Shortcut';
+        nameInput.value = shortcuts[index].name;
+        urlInput.value = shortcuts[index].url;
+        saveButton.onclick = function() {
+            editShortcut(index);
+        };
+    } else {
+        document.getElementById('modal-title').innerText = 'Add Shortcut';
+        nameInput.value = '';
+        urlInput.value = '';
+        saveButton.onclick = function() {
+            addShortcut();
+        };
+    }
+    
+    modal.style.display = 'block';
+}
+
+function deleteShortcut(index) {
+    let shortcuts = JSON.parse(localStorage.getItem('shortcuts'));
+    shortcuts.splice(index, 1);
+    localStorage.setItem('shortcuts', JSON.stringify(shortcuts));
+    loadShortcuts();
+}
+
+document.getElementById('cancel-shortcut').onclick = function() {
+    document.getElementById('shortcut-modal').style.display = 'none';
+};
+
+function addShortcut() {
+    let name = document.getElementById('shortcut-name').value.trim();
+    let url = document.getElementById('shortcut-url').value.trim();
+    
+    if (name && url) {
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+        
+        let shortcuts = JSON.parse(localStorage.getItem('shortcuts')) || [];
+        shortcuts.push({ name, url });
+        localStorage.setItem('shortcuts', JSON.stringify(shortcuts));
+        document.getElementById('shortcut-modal').style.display = 'none';
+        loadShortcuts();
+    }
+}
+
+function editShortcut(index) {
+    let shortcuts = JSON.parse(localStorage.getItem('shortcuts'));
+    shortcuts[index].name = document.getElementById('shortcut-name').value;
+    shortcuts[index].url = document.getElementById('shortcut-url').value;
+    localStorage.setItem('shortcuts', JSON.stringify(shortcuts));
+    document.getElementById('shortcut-modal').style.display = 'none';
+    loadShortcuts();
+}

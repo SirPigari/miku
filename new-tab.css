@@ -1,0 +1,343 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+#logo {
+    cursor: pointer;
+    width: 650px;
+    margin-bottom: -4px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: -300px;
+}
+
+.search-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-bar {
+    width: 800px;
+    height: 28px;
+    padding: 10px 15px 10px 35px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.search-bar:focus {
+    border-color: #4A90E2;
+}
+
+.search-bar::placeholder {
+    color: #888;
+}
+
+.search-bar-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+.search-bar-container {
+    position: relative;
+}
+
+button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+datalist {
+    width: 800px;
+    position: absolute;
+    top: 45px;
+    z-index: 1000;
+}
+
+datalist option {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+datalist option:hover {
+    background-color: #e4e4e4;
+}
+
+.shortcuts-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    z-index: 1;
+}
+
+.shortcut {
+    width: 80px;
+    height: 80px;
+    background-color: #ebebeb;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+    transition: box-shadow 0.15s ease-in-out, transform 0.15s ease-in-out;
+    border: 1px solid #f7f7f7;
+}
+
+.shortcut:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+}
+
+.shortcut img {
+    width: 32px;
+    height: 32px;
+}
+
+.shortcut-options {
+    position: absolute;
+    flex-direction: column;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    gap: 2.5px;
+}
+
+.shortcut-options button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: rgba(136, 136, 136, 1);
+    padding: 3px;
+    transition: color 0.2s ease-in-out;
+}
+
+.shortcut-options button:hover {
+    color: rgba(51, 51, 51, 1);
+}        
+
+.shortcut-options .delete-button i {
+    font-size: 12px;
+}
+
+.shortcut-options .edit-button i {
+    font-size: 12px;
+}
+
+.add-button {
+    font-size: 35px;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #f3f3f3;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 450px;
+    height: auto;
+    border: 1px solid #333;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    border-radius: 10px;
+    box-shadow: none;
+    background-color: #f3f3f3;
+}
+
+.modal-buttons button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.modal-buttons button:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content input {
+    width: 93%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    outline: none;
+    transition: 0.3s;
+    background-color: #f9f9f9;
+}
+
+.modal-content input:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content input:focus {
+    border-color: #4A90E2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
+.modal-content input::placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+#about-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(19, 122, 127, 0.5);
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+}
+
+#about-button:hover {
+    background-color: rgba(19, 122, 127, 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+@media screen and (max-width: 768px) and (orientation: portrait) {
+    #logo {
+        width: 80%;
+        margin-bottom: -4px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+    .search-bar {
+        width: 90%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    datalist {
+        width: 90%;
+    }
+
+    .shortcuts-container {
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .shortcut {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+    }
+
+    .shortcut img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .shortcut-options button {
+        font-size: 10px;
+    }
+
+    .modal {
+        width: 90%;
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        margin-top: -300px;
+    }
+
+    .search-bar-container {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .modal {
+        width: 90vw;
+        padding: 10px;
+    }
+
+    #logo {
+        margin-top: 200px;
+        width: 60vw;
+        margin-bottom: -4px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+    .search-bar {
+        width: 45vw;
+    }
+}

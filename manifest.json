@@ -1,0 +1,40 @@
+{
+    "manifest_version": 3,
+    "name": "Hatsune Miku <3",
+    "version": "6.9",
+    "description": ":3",
+    "permissions": [
+      "tabs",
+      "storage",
+      "activeTab",
+      "webNavigation",
+      "webRequest",
+      "scripting"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "run_at": "document_end"
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icon.png"
+    },
+    "chrome_url_overrides": {
+      "newtab": "new-tab.html"
+    },
+    "icons": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    },
+    "host_permissions": [
+      "<all_urls>"
+    ]
+  }
+  

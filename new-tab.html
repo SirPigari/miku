@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mikuuuu :3">
+    <meta name="keywords" content="search, google, stylish, new tab, homepage, miku, :3, hatsune">
+    <meta name="author" content="SirPigari">
+    <meta property="og:title" content="New tab">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Mikuuuu :3">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:url" content="https://github.com/SirPigari/">
+    <title>New tab</title>
+
+    <link rel="icon" href="icon.png" type="image/png">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="new-tab.css">
+
+    <script src="new-tab.js" defer></script>
+</head>
+<body>
+    <div class="search-container">
+        <a href="https://www.google.com/" target="_blank" id="logo-link">
+            <img id="logo" src="logo.png" alt="Logo" title="Mikuuuuu <3">
+        </a>
+    </div>
+
+    <div class="search-bar-container">
+        <form action="https://www.google.com/search" method="get" target="_self" id="searchForm">
+            <input type="text" name="q" class="search-bar" placeholder="Search Google..." autocomplete="off" required>
+            <button type="submit" class="search-bar-icon">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+
+    <div class="shortcuts-container"></div>
+
+    <div id="shortcut-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Add Shortcut</h2>
+            <label>Name:</label>
+            <input type="text" id="shortcut-name" autocomplete="off">
+            <label>URL:</label>
+            <input type="text" id="shortcut-url" autocomplete="off">
+            <div class="modal-buttons">
+                <button id="save-shortcut">Save</button>
+                <button id="cancel-shortcut">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Delete shortcut?</h2>
+            <label>Are you sure you want to delete this shortcut?</label>
+            <div class="modal-buttons">
+                <button id="confirm-delete">Delete</button>
+                <button id="cancel-delete">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://github.com/SirPigari/miku" id="about-button" target="_blank">About</a>
+</body>
+</html>
