@@ -56,9 +56,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
         updateStatus();
 
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.reload(tabs[0].id);
-        });
+        chrome.tabs.query({}, function (tabs) {
+            // Iterate through all open tabs
+            tabs.forEach(function (tab) {
+                // Check if the tab's URL exactly matches chrome://newtab
+                if (tab.url === "chrome://newtab/") {
+                    // Reload the tab if it matches
+                    chrome.tabs.reload(tab.id);
+                }
+            });
+        });        
     });
 
     // Reset button logic
@@ -74,9 +81,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
         updateStatus();
 
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.reload(tabs[0].id);
+        chrome.tabs.query({}, function (tabs) {
+            // Iterate through all open tabs
+            tabs.forEach(function (tab) {
+                // Check if the tab's URL exactly matches chrome://newtab
+                if (tab.url === "chrome://newtab/") {
+                    // Reload the tab if it matches
+                    chrome.tabs.reload(tab.id);
+                }
+            });
         });
+        
     });
 
     // Update search engine input visibility
