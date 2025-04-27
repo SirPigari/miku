@@ -1,86 +1,136 @@
-const nudeModeToggle = document.getElementById('nudeModeToggle');
-const enableBackgroundToggle = document.getElementById('enableBackgroundToggle');
-const defaultImageSelect = document.getElementById('defaultImageSelect');
-const saveBtn = document.getElementById('saveBtn');
-const resetBtn = document.getElementById('resetBtn');
-const statusText = document.getElementById('statusText');
+// Global constants for search engines
+const engines = [
+    { label: 'Google', value: 'https://www.google.com/search?q=%s' },
+    { label: 'Bing', value: 'https://www.bing.com/search?q=%s' },
+    { label: 'DuckDuckGo', value: 'https://duckduckgo.com/?q=%s' },
+    { label: 'Google (udm=14)', value: 'https://www.google.com/search?udm=14&q=%s' },
+    { label: 'Yahoo', value: 'https://search.yahoo.com/search?p=%s' },
+    { label: 'Brave Search', value: 'https://search.brave.com/search?q=%s' },
+    { label: 'Custom', value: 'custom' }
+];
 
-window.onload = function () {
-    const savedNudeMode = localStorage.getItem('nudeMode') === 'true';
-    const savedBackgroundEnabled = localStorage.getItem('backgroundEnabled') === 'true';
-    const savedDefaultImage = localStorage.getItem('defaultImage') || savedNudeMode ? 'miku_nude_4.png' : 'miku_normal_4.png';
-    
-    populateImageOptions(savedNudeMode);
+document.addEventListener("DOMContentLoaded", function() {
+    const defaultImageSelect = document.getElementById('defaultImageSelect');
+    const searchEngineSelect = document.getElementById('searchEngineSelect');
+    const customSearchContainer = document.getElementById('customSearchContainer');
+    const customSearchInput = document.getElementById('customSearchInput');
+    const saveBtn = document.getElementById('saveBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const statusText = document.getElementById('statusText');
 
-    defaultImageSelect.value = savedDefaultImage;
-    nudeModeToggle.checked = savedNudeMode;
-    enableBackgroundToggle.checked = savedBackgroundEnabled;
+    // Retrieve saved settings from localStorage
+    const savedDefaultImage = localStorage.getItem('defaultImage') || 'miku_normal.png';
+    let savedSearchEngine = localStorage.getItem('searchEngine');
 
-    updateStatus();
-};
-
-saveBtn.addEventListener('click', () => {
-    localStorage.setItem('nudeMode', nudeModeToggle.checked);
-    localStorage.setItem('backgroundEnabled', enableBackgroundToggle.checked);
-    localStorage.setItem('defaultImage', defaultImageSelect.value);
-
-    updateStatus();
-    updateBackgroundMode();
-});
-
-resetBtn.addEventListener('click', () => {
-    localStorage.removeItem('nudeMode');
-    localStorage.removeItem('backgroundEnabled');
-
-    nudeModeToggle.checked = false;
-    enableBackgroundToggle.checked = true;
-
-    updateStatus();
-
-    updateBackgroundMode();
-});
-
-function updateStatus() {
-    const nudeModeStatus = nudeModeToggle.checked ? 'Enabled' : 'Disabled';
-    const backgroundStatus = enableBackgroundToggle.checked ? 'Enabled' : 'Disabled';
-
-    statusText.textContent = `Nude Mode: ${nudeModeStatus}, Background Image: ${backgroundStatus}, Default Image: ${localStorage.getItem('defaultImage')}`;
-    populateImageOptions(nudeModeToggle.checked);
-}
-
-function updateBackgroundMode() {
-    if (enableBackgroundToggle.checked) {
-        localStorage.setItem('nudeMode', nudeModeToggle.checked);
-    } else {
-        document.body.style.backgroundImage = 'none';
-        document.body.style.backgroundColor = '#fff';
+    // If no search engine is saved, default it to Google
+    if (!savedSearchEngine) {
+        savedSearchEngine = 'https://www.google.com/search?q=%s';
+        localStorage.setItem('searchEngine', savedSearchEngine);
     }
-}
 
-function populateImageOptions(isNudeMode) {
-    defaultImageSelect.innerHTML = '';
+    // Populate options
+    populateImageOptions(defaultImageSelect);
+    populateSearchEngineOptions(searchEngineSelect);
 
-    const images = isNudeMode ? [
-        'none',
-        'miku_nude_1.png',
-        'miku_nude_2.png',
-        'miku_nude_3.png',
-        'miku_nude_4.png'
-    ] : [
-        'none',
-        'miku_normal_1.png',
-        'miku_normal_2.png',
-        'miku_normal_3.png',
-        'miku_normal_4.png'
-    ];
+    // Set saved values
+    defaultImageSelect.value = savedDefaultImage;
 
-    images.forEach(image => {
-        const option = document.createElement('option');
-        option.value = image;
-        option.textContent = image;
-        defaultImageSelect.appendChild(option);
+    // Handle search engine
+    if (engines.map(engine => engine.value).includes(savedSearchEngine)) {
+        searchEngineSelect.value = savedSearchEngine;
+        customSearchContainer.style.display = "none";
+    } else {
+        searchEngineSelect.value = "custom";
+        customSearchContainer.style.display = "block";
+        customSearchInput.value = savedSearchEngine;
+    }
+
+    updateStatus();
+
+    // Save button logic
+    saveBtn.addEventListener('click', () => {
+        localStorage.setItem('defaultImage', defaultImageSelect.value);
+
+        const searchEngineValue = searchEngineSelect.value === 'custom' ? customSearchInput.value : searchEngineSelect.value;
+        localStorage.setItem('searchEngine', searchEngineValue);
+
+        updateStatus();
+
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.reload(tabs[0].id);
+        });
     });
 
-    const savedDefaultImage = localStorage.getItem('defaultImage') || (isNudeMode ? 'miku_nude_4.png' : 'miku_normal_4.png');
-    defaultImageSelect.value = savedDefaultImage;
-}
+    // Reset button logic
+    resetBtn.addEventListener('click', () => {
+        localStorage.removeItem('defaultImage');
+        localStorage.removeItem('searchEngine');
+
+        searchEngineSelect.selectedIndex = 0;
+        customSearchContainer.style.display = "none";
+        customSearchInput.value = '';
+
+        populateImageOptions(defaultImageSelect);
+
+        updateStatus();
+
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.reload(tabs[0].id);
+        });
+    });
+
+    // Update search engine input visibility
+    searchEngineSelect.addEventListener('change', () => {
+        if (searchEngineSelect.value === 'custom') {
+            customSearchContainer.style.display = 'block';
+        } else {
+            customSearchContainer.style.display = 'none';
+        }
+    });
+    
+    // Update status text
+    function updateStatus() {
+        const defaultImage = localStorage.getItem('defaultImage') || 'miku_normal.png';
+        let searchEngine = localStorage.getItem('searchEngine');
+
+        // If not set, fix to Google
+        if (!searchEngine) {
+            searchEngine = 'https://www.google.com/search?q=%s';
+            localStorage.setItem('searchEngine', searchEngine);
+        }
+
+        statusText.textContent = `Image: ${defaultImage}, Search: ${searchEngine}`;
+    }
+
+    function populateImageOptions(defaultImageSelect) {
+        defaultImageSelect.innerHTML = '';
+
+        const images = [
+            'none',
+            'miku_normal.png',
+            'miku_nude.png',
+        ];
+
+        images.forEach(image => {
+            const option = document.createElement('option');
+            option.value = image;
+            option.textContent = image;
+            defaultImageSelect.appendChild(option);
+        });
+
+        const savedDefaultImage = localStorage.getItem('defaultImage') || 'miku_normal.png';
+        defaultImageSelect.value = savedDefaultImage;
+    }
+
+    // Fill search engine select dropdown
+    function populateSearchEngineOptions(searchEngineSelect) {
+        searchEngineSelect.innerHTML = '';
+
+        engines.forEach(engine => {
+            const option = document.createElement('option');
+            option.value = engine.value;
+            option.textContent = engine.label;
+            searchEngineSelect.appendChild(option);
+        });
+    }
+});

@@ -8,7 +8,7 @@ window.onload = function() {
     
     let backgroundImage = `./miku_${imageCategory}_${randomImageIndex}.png`;
     if (localStorage.getItem('backgroundEnabled') !== 'true') {
-        const defaultImage = localStorage.getItem('defaultImage') || 'miku_normal_4.png';
+        const defaultImage = localStorage.getItem('defaultImage') || 'miku_normal.png';
 
         if (defaultImage === 'none') {
             document.body.style.backgroundImage = 'none';
@@ -192,3 +192,39 @@ function editShortcut(index) {
     document.getElementById('shortcut-modal').style.display = 'none';
     loadShortcuts();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('searchForm');
+    const searchInput = form.querySelector('input[name="q"]');
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    // NEW: Fetch the saved search engine from localStorage
+    let savedSearchEngine = localStorage.getItem('searchEngine') || 'https://www.google.com/search?q=%s';
+
+    submitButton.addEventListener('mouseover', function() {
+        const query = searchInput.value.trim();
+        submitButton.style.cursor = query ? 'pointer' : 'default';
+    });
+
+    form.addEventListener('submit', function(event) {
+        const query = searchInput.value.trim();
+
+        if (!query) {
+            event.preventDefault();
+            return;
+        }
+
+        event.preventDefault(); // prevent default form action
+
+        // Redirect to the custom or saved search engine
+        const searchURL = savedSearchEngine.replace('%s', encodeURIComponent(query));
+        window.location.href = searchURL;
+    });
+
+    submitButton.addEventListener('click', function(event) {
+        const query = searchInput.value.trim();
+        if (!query) {
+            event.preventDefault();
+        }
+    });
+});

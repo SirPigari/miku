@@ -11,7 +11,7 @@ body {
 }
 
 #logo {
-    cursor: pointer;
+    cursor: normal;
     width: 650px;
     margin-bottom: -4px;
 }

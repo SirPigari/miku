@@ -31,18 +31,19 @@
         }
 
         .setting-container label {
-            margin: 10px 0;
+            margin: 10px 0 5px;
             font-size: 16px;
         }
 
-        .setting-container input[type="checkbox"] {
-            margin-left: 10px;
-            width: 40px;
-            height: 20px;
+        .setting-container input[type="checkbox"],
+        .setting-container select,
+        .setting-container input[type="text"],
+        .setting-container input[type="color"] {
+            margin-top: 5px;
+            width: 100%;
         }
 
         .setting-container select {
-            margin-left: 10px;
             padding: 8px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -52,18 +53,36 @@
             transition: border 0.3s;
         }
 
-        .setting-container select:focus {
+        .setting-container input[type="text"],
+        .setting-container input[type="color"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 93%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            transition: border 0.3s;
+        }
+
+        .setting-container select:focus, 
+        .setting-container input[type="text"]:focus,
+        .setting-container input[type="color"]:focus {
             border-color: #4A90E2;
         }
 
-        .save-btn {
-            margin-top: 20px;
+        .save-btn, .reset-btn {
+            width: 100%;
+            margin-top: 15px;
             padding: 10px;
-            background-color: #4A90E2;
+            font-size: 16px;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+        }
+
+        .save-btn {
+            background-color: #4A90E2;
         }
 
         .save-btn:hover {
@@ -71,13 +90,7 @@
         }
 
         .reset-btn {
-            margin-top: 10px;
-            padding: 10px;
             background-color: #D9534F;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
 
         .reset-btn:hover {
@@ -88,6 +101,12 @@
             font-size: 14px;
             color: #888;
             margin-top: 10px;
+            text-align: center;
+        }
+
+        #customSearchContainer {
+            display: none;
+            width: 100%;
         }
     </style>
 </head>
@@ -95,18 +114,19 @@
     <h2>Settings</h2>
 
     <div class="setting-container">
-        <label>
-            <input type="checkbox" id="nudeModeToggle">
-            Enable Nude Mode
-        </label>
-        <label>
-            <input type="checkbox" id="enableBackgroundToggle">
-            Enable Background Image
-        </label>
-        <label for="defaultImageSelect">
-            <select id="defaultImageSelect">
-            </select>
-        </label>
+        <label for="defaultImageSelect">Default Image:</label>
+        <select id="defaultImageSelect">
+            <option value="none">None</option>
+            <option value="miku_normal.png">Miku Normal</option>
+            <option value="miku_nude.png">Miku Nude</option>
+        </select>
+
+        <label for="searchEngineSelect">Default Search Engine:</label>
+        <select id="searchEngineSelect"></select>
+
+        <div id="customSearchContainer">
+            <input type="text" id="customSearchInput" placeholder="Enter custom URL with %s">
+        </div>
     </div>
 
     <button class="save-btn" id="saveBtn">Save Settings</button>
