@@ -9,7 +9,11 @@
       "activeTab",
       "webNavigation",
       "webRequest",
-      "scripting"
+      "scripting",
+      "contextMenus",
+      "downloads",
+      "unlimitedStorage",
+      "offscreen"
     ],
     "background": {
       "service_worker": "background.js"
@@ -17,24 +21,41 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
+        "exclude_matches": [
+          "https://www.youtube.com/*",
+          "https://www.google.com/*",
+          "https://www.facebook.com/*",
+          "https://www.twitter.com/*"
+        ],
         "js": ["content.js"],
         "run_at": "document_end"
       }
     ],
     "action": {
       "default_popup": "popup.html",
-      "default_icon": "icon.png"
+      "default_icon": "images/icon.png"
     },
     "chrome_url_overrides": {
       "newtab": "new-tab.html"
     },
     "icons": {
-      "16": "icon.png",
-      "48": "icon.png",
-      "128": "icon.png"
+      "16": "images/icon.png",
+      "48": "images/icon.png",
+      "128": "images/icon.png"
     },
     "host_permissions": [
       "<all_urls>"
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "*.js",
+          "*.html"
+        ],
+        "matches": [
+          "<all_urls>"
+        ]
+      }
     ]
   }
   

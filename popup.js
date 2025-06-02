@@ -1,4 +1,3 @@
-// Global constants for search engines
 const engines = [
     { label: 'Google', value: 'https://www.google.com/search?q=%s' },
     { label: 'Bing', value: 'https://www.bing.com/search?q=%s' },
@@ -10,32 +9,29 @@ const engines = [
 ];
 
 document.addEventListener("DOMContentLoaded", function() {
-    const defaultImageSelect = document.getElementById('defaultImageSelect');
+    const backgroundImageSelect = document.getElementById('backgroundImageSelect');
     const searchEngineSelect = document.getElementById('searchEngineSelect');
     const customSearchContainer = document.getElementById('customSearchContainer');
     const customSearchInput = document.getElementById('customSearchInput');
     const saveBtn = document.getElementById('saveBtn');
     const resetBtn = document.getElementById('resetBtn');
     const statusText = document.getElementById('statusText');
+    const customBgContainer = document.querySelector('#customBgContainer');
+    const customBgInput = document.querySelector('#customBgInput');
 
-    // Retrieve saved settings from localStorage
-    const savedDefaultImage = localStorage.getItem('defaultImage') || 'miku_normal.png';
+    const savedbackgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
     let savedSearchEngine = localStorage.getItem('searchEngine');
 
-    // If no search engine is saved, default it to Google
     if (!savedSearchEngine) {
         savedSearchEngine = 'https://www.google.com/search?q=%s';
         localStorage.setItem('searchEngine', savedSearchEngine);
     }
 
-    // Populate options
-    populateImageOptions(defaultImageSelect);
+    populateImageOptions(backgroundImageSelect);
     populateSearchEngineOptions(searchEngineSelect);
 
-    // Set saved values
-    defaultImageSelect.value = savedDefaultImage;
+    backgroundImageSelect.value = savedbackgroundImage;
 
-    // Handle search engine
     if (engines.map(engine => engine.value).includes(savedSearchEngine)) {
         searchEngineSelect.value = savedSearchEngine;
         customSearchContainer.style.display = "none";
@@ -45,99 +41,139 @@ document.addEventListener("DOMContentLoaded", function() {
         customSearchInput.value = savedSearchEngine;
     }
 
+    customBgContainer.style.display = savedbackgroundImage === 'custom' ? 'block' : 'none';
+
     updateStatus();
 
-    // Save button logic
     saveBtn.addEventListener('click', () => {
-        localStorage.setItem('defaultImage', defaultImageSelect.value);
+        localStorage.setItem('backgroundImage', backgroundImageSelect.value);
 
         const searchEngineValue = searchEngineSelect.value === 'custom' ? customSearchInput.value : searchEngineSelect.value;
         localStorage.setItem('searchEngine', searchEngineValue);
 
+        if (backgroundImageSelect.value === 'custom') {
+            localStorage.setItem('customBackgroundImage', customBgInput.value);
+        }
+
         updateStatus();
 
         chrome.tabs.query({}, function (tabs) {
-            // Iterate through all open tabs
             tabs.forEach(function (tab) {
-                // Check if the tab's URL exactly matches chrome://newtab
                 if (tab.url === "chrome://newtab/") {
-                    // Reload the tab if it matches
                     chrome.tabs.reload(tab.id);
                 }
             });
-        });        
+        });
+        this.location.reload();
     });
 
-    // Reset button logic
     resetBtn.addEventListener('click', () => {
-        localStorage.removeItem('defaultImage');
+        const savedShortcuts = localStorage.getItem("shortcuts");
+
+        localStorage.clear();
+
+        if (savedShortcuts !== null) {
+            localStorage.setItem("shortcuts", savedShortcuts);
+        }
+
+        localStorage.removeItem('backgroundImage');
         localStorage.removeItem('searchEngine');
 
         searchEngineSelect.selectedIndex = 0;
         customSearchContainer.style.display = "none";
         customSearchInput.value = '';
+        customBgContainer.style.display = 'none';
+        customBgInput.value = '';
+        backgroundImageSelect.value = 'miku_normal.png';
+        localStorage.removeItem('customBackgroundImage');
+        localStorage.setItem('backgroundImage', 'miku_normal.png');
 
-        populateImageOptions(defaultImageSelect);
+        populateImageOptions(backgroundImageSelect);
 
         updateStatus();
 
         chrome.tabs.query({}, function (tabs) {
-            // Iterate through all open tabs
             tabs.forEach(function (tab) {
-                // Check if the tab's URL exactly matches chrome://newtab
                 if (tab.url === "chrome://newtab/") {
-                    // Reload the tab if it matches
                     chrome.tabs.reload(tab.id);
                 }
             });
         });
-        
     });
 
-    // Update search engine input visibility
     searchEngineSelect.addEventListener('change', () => {
         if (searchEngineSelect.value === 'custom') {
             customSearchContainer.style.display = 'block';
         } else {
             customSearchContainer.style.display = 'none';
         }
+        updateStatus();
+    });
+
+    backgroundImageSelect.addEventListener('change', () => {
+        if (backgroundImageSelect.value === 'custom') {
+            customBgContainer.style.display = 'block';
+            customBgInput.value = localStorage.getItem('customBackgroundImage') || '';
+        } else {
+            customBgContainer.style.display = 'none';
+        }
+
+        if (localStorage.getItem('customBackgroundImage') == '') {
+            if (backgroundImageSelect.value === 'custom') {
+                localStorage.setItem('customBackgroundImage', customBgInput.value || 'custom.png');
+            } else {
+                localStorage.removeItem('customBackgroundImage');
+            }
+        }
+
+        updateStatus();
     });
     
-    // Update status text
     function updateStatus() {
-        const defaultImage = localStorage.getItem('defaultImage') || 'miku_normal.png';
+        let backgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
         let searchEngine = localStorage.getItem('searchEngine');
+        const customBgImage = localStorage.getItem('customBackgroundImage');
 
-        // If not set, fix to Google
         if (!searchEngine) {
             searchEngine = 'https://www.google.com/search?q=%s';
             localStorage.setItem('searchEngine', searchEngine);
         }
 
-        statusText.textContent = `Image: ${defaultImage}, Search: ${searchEngine}`;
+        if (backgroundImage === 'custom' && customBgImage) {
+            backgroundImage = "Custom (" + customBgImage + ")";
+        }
+
+        statusText.textContent = `Image: ${backgroundImage}, Search: ${searchEngine}`;
     }
 
-    function populateImageOptions(defaultImageSelect) {
-        defaultImageSelect.innerHTML = '';
+    function populateImageOptions(backgroundImageSelect) {
+        backgroundImageSelect.innerHTML = '';
 
         const images = [
             'none',
             'miku_normal.png',
             'miku_nude.png',
+            'custom',
         ];
 
         images.forEach(image => {
             const option = document.createElement('option');
             option.value = image;
             option.textContent = image;
-            defaultImageSelect.appendChild(option);
+            backgroundImageSelect.appendChild(option);
         });
+        
+        const savedbackgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
+        const savedCustomImage = localStorage.getItem('customBackgroundImage');
 
-        const savedDefaultImage = localStorage.getItem('defaultImage') || 'miku_normal.png';
-        defaultImageSelect.value = savedDefaultImage;
+        if (savedCustomImage) {
+            customBgContainer.style.display = 'block';
+            customBgInput.value = savedCustomImage || '';
+        }
+
+        backgroundImageSelect.value = savedbackgroundImage;
     }
 
-    // Fill search engine select dropdown
     function populateSearchEngineOptions(searchEngineSelect) {
         searchEngineSelect.innerHTML = '';
 

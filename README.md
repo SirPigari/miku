@@ -1,37 +1,59 @@
-# Miku-Tabs
+# 🌟 Miku-Tabs
 
-Ever wished your new tab page was cuter? **Miku-Tabs** is a Chrome extension that makes every new tab better—because it adds Miku! 💙🎶
+Tired of plain old new tabs?  
+**Miku-Tabs** is a Chrome extension that brings a dose of cuteness to your browser with the one and only **Hatsune Miku!** 💙🎶
 
-Say goodbye to boring new tabs and hello to a touch of Hatsune Miku’s charm every time you open your browser. ✨
+Say goodbye to boring tabs and hello to Miku magic every time you open your browser. ✨
 
-## **1. Install Miku-Tabs via GitHub**
+---
 
-Since **Miku-Tabs** is not available on the Google Chrome Web Store, you can install it manually from GitHub. Follow these steps:
+## 🛠️ How to Install Miku-Tabs via GitHub
 
-### **Step 1: Clone the Repository**
+Since **Miku-Tabs** isn’t available on the Chrome Web Store, here’s how to install it manually:
 
-First, you need to clone the **Miku-Tabs** repository from GitHub. Open your terminal and run the following command:
+### ✅ Step 1: Clone the Repository
+
+Open your terminal and run:
 
 ```bash
 git clone https://github.com/SirPigari/miku.git
 ```
 
-This will create a local copy of the repository in a folder named `miku` on your computer.
-
-### **Step 2: Open Chrome and Go to Extensions**
-
-1. Open **Google Chrome**.
-2. In the address bar, type [`chrome://extensions/`](chrome://extensions) and press **Enter**.
-3. Toggle the **Developer mode** switch in the top right corner to enable it.
-
-### **Step 3: Load the Extension Locally**
-
-1. Click on the **Load unpacked** button.
-2. In the file picker window, navigate to the folder where you cloned the **Miku-Tabs** repository. By default, it will be in your home directory or wherever you ran the clone command (the folder is called `miku`).
-3. Select the `miku` folder and click **Select Folder**.
-
-The extension will now be installed and active on your browser! 🎉
+This will create a folder called `miku` with the extension files on your computer.
 
 ---
 
-Enjoy browsing with Miku! 💖
+### ✅ Step 2: Open Chrome Extensions Settings
+
+1. Open **Google Chrome**.
+2. In the address bar, type: [`chrome://extensions/`](chrome://extensions) and press **Enter**.
+3. Enable **Developer mode** using the toggle in the top-right corner.
+
+![Enable Developer Mode](images/sc/sc1.png)
+
+---
+
+### ✅ Step 3: Load the Extension
+
+1. Click the **Load unpacked** button.  
+![Load Unpacked](images/sc/sc2.png)
+
+2. In the dialog, navigate to the `miku` folder you cloned earlier and select it.
+
+3. After selecting the folder, the extension will appear in your list like this:  
+![Extension Loaded](images/sc/sc3.png)
+
+---
+
+### ✅ Step 4: Approve the New Tab Override
+
+When you open a new tab for the first time, you’ll see this prompt:
+
+![New Tab Prompt](images/sc/sc4.png)
+
+Click **Keep it** to confirm.
+
+---
+
+🎉 **That’s it!**  
+Enjoy browsing with a touch of Miku’s charm! 💖

@@ -261,50 +261,30 @@ datalist option:hover {
 }
 
 @media screen and (max-width: 768px) and (orientation: portrait) {
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: -100px;
+    }
+
     #logo {
-        width: 80%;
+        width: 90%;
+        margin-top: -100px;
         margin-bottom: -4px;
         display: block;
         margin-left: auto;
         margin-right: auto;
     }
 
-
-    .search-bar {
-        width: 90%;
+    .search-bar-container {
         display: block;
         margin-left: auto;
         margin-right: auto;
     }
 
-    datalist {
-        width: 90%;
-    }
-
-    .shortcuts-container {
-        gap: 10px;
-        margin-top: 30px;
-    }
-
-    .shortcut {
-        width: 60px;
-        height: 60px;
-        border-radius: 15px;
-    }
-
-    .shortcut img {
-        width: 24px;
-        height: 24px;
-    }
-
-    .shortcut-options button {
-        font-size: 10px;
-    }
-
-    .modal {
-        width: 90%;
-        padding: 10px;
-    }
 }
 
 @media screen and (max-width: 768px) and (orientation: landscape) {

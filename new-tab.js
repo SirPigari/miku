@@ -1,20 +1,22 @@
 window.onload = function() {
-    const nudeMode = localStorage.getItem('nudeMode') === 'true';
-    let imageCategory = nudeMode ? 'nude' : 'normal';
-    let imageCount = 4;
-    let randomImageIndex = Math.floor(Math.random() * imageCount) + 1;
-
     loadShortcuts();
-    
-    let backgroundImage = `./miku_${imageCategory}_${randomImageIndex}.png`;
+    let backgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
     if (localStorage.getItem('backgroundEnabled') !== 'true') {
-        const defaultImage = localStorage.getItem('defaultImage') || 'miku_normal.png';
+        backgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
+        if (backgroundImage === 'custom') {
+            backgroundImage = localStorage.getItem('customBackgroundImage') || 'custom.png';
+        }
 
-        if (defaultImage === 'none') {
+        if (backgroundImage === 'none') {
             document.body.style.backgroundImage = 'none';
             return;
         }
-        backgroundImage = `./${defaultImage}`;
+        backgroundImage = `./images/${backgroundImage}`;
+
+        let customBackgroundImage = localStorage.getItem('customBackgroundImage');
+        if (customBackgroundImage && customBackgroundImage != '') {
+            backgroundImage = customBackgroundImage;
+        }
     }
     
 
@@ -198,7 +200,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = form.querySelector('input[name="q"]');
     const submitButton = form.querySelector('button[type="submit"]');
 
-    // NEW: Fetch the saved search engine from localStorage
     let savedSearchEngine = localStorage.getItem('searchEngine') || 'https://www.google.com/search?q=%s';
 
     submitButton.addEventListener('mouseover', function() {
@@ -214,9 +215,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        event.preventDefault(); // prevent default form action
+        event.preventDefault();
 
-        // Redirect to the custom or saved search engine
         const searchURL = savedSearchEngine.replace('%s', encodeURIComponent(query));
         window.location.href = searchURL;
     });

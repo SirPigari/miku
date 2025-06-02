@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Import Data</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .import-container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0 0 20px;
+            font-weight: 700;
+            color: #333;
+            user-select: none;
+        }
+
+        #importFile {
+            display: none;
+        }
+
+        .custom-file-label {
+            display: inline-block;
+            will-change: background-color, box-shadow;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s ease;
+            border: none;
+            outline: none;
+            background-color: rgba(19, 122, 127, 0.5);
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        .custom-file-label:hover,
+        .custom-file-label:focus {
+            background-color: rgba(19, 122, 127, 0.8);
+            box-shadow: 0 6px 12px rgba(53, 122, 189, 0.5);
+        }
+
+        #fileName {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            min-height: 1em;
+            user-select: text;
+            font-style: italic;
+        }
+    </style>
+    <script src="import.js" defer></script>
+</head>
+
+<body>
+    <div class="import-container">
+        <h1>Import Data</h1>
+        <label for="importFile" class="custom-file-label" tabindex="0">
+            Choose JSON file
+        </label>
+        <input type="file" id="importFile" accept=".json" />
+        <div id="fileName"></div>
+    </div>
+</body>
+
+</html>
