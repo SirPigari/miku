@@ -55,5 +55,26 @@ Click **Keep it** to confirm.
 
 ---
 
+### ✅ Step 5: Access Miku-Tabs from the Toolbar
+
+Once the extension is installed, you’ll see it in the top-right corner of Chrome:
+
+![Extension in Toolbar](images/sc/sc5.png)
+
+Click the **Miku-Tabs icon** to open its popup settings.
+
+---
+
+### ✅ Step 6: Customize Miku-Tabs
+
+In the popup, you can configure options like:
+
+- 🎨 Changing the **background image**
+- 🔍 Choosing your **default search engine** (Google by default)
+
+![Extension Popup Settings](images/sc/sc6.png)
+
+---
+
 🎉 **That’s it!**  
 Enjoy browsing with a touch of Miku’s charm! 💖
