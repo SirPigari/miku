@@ -26,7 +26,7 @@ This will create a folder called `miku` with the extension files on your compute
 ### ✅ Step 2: Open Chrome Extensions Settings
 
 1. Open **Google Chrome**.
-2. In the address bar, type: [`chrome://extensions/`](chrome://extensions) and press **Enter**.
+2. In the address bar, type: `chrome://extensions/` and press **Enter**.
 3. Enable **Developer mode** using the toggle in the top-right corner.
 
 ![Enable Developer Mode](images/sc/sc1.png)
