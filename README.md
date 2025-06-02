@@ -5,6 +5,10 @@ Tired of plain old new tabs?
 
 Say goodbye to boring tabs and hello to Miku magic every time you open your browser. ✨
 
+Here’s what your new tab will look like with Miku-Tabs installed:
+
+![Miku-Tabs Final Look](images/sc/sc7.png)
+
 ---
 
 ## 🛠️ How to Install Miku-Tabs via GitHub
