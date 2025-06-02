@@ -5,7 +5,7 @@ Tired of plain old new tabs?
 
 Say goodbye to boring tabs and hello to Miku magic every time you open your browser. ✨
 
-Here’s what your new tab will look like with Miku-Tabs installed:
+Here's what your new tab will look like with Miku-Tabs installed:
 
 ![Miku-Tabs Final Look](images/sc/sc7.png)
 
@@ -13,7 +13,7 @@ Here’s what your new tab will look like with Miku-Tabs installed:
 
 ## 🛠️ How to Install Miku-Tabs via GitHub
 
-Since **Miku-Tabs** isn’t available on the Chrome Web Store, here’s how to install it manually:
+Since **Miku-Tabs** isn't available on the Chrome Web Store, here's how to install it manually:
 
 ### ✅ Step 1: Clone the Repository
 
@@ -51,7 +51,7 @@ This will create a folder called `miku` with the extension files on your compute
 
 ### ✅ Step 4: Approve the New Tab Override
 
-When you open a new tab for the first time, you’ll see this prompt:
+When you open a new tab for the first time, you'll see this prompt:
 
 ![New Tab Prompt](images/sc/sc4.png)
 
@@ -61,7 +61,7 @@ Click **Keep it** to confirm.
 
 ### ✅ Step 5: Access Miku-Tabs from the Toolbar
 
-Once the extension is installed, you’ll see it in the top-right corner of Chrome:
+Once the extension is installed, you'll see it in the top-right corner of Chrome:
 
 ![Extension in Toolbar](images/sc/sc5.png)
 
@@ -80,5 +80,5 @@ In the popup, you can configure options like:
 
 ---
 
-🎉 **That’s it!**  
-Enjoy browsing with a touch of Miku’s charm! 💖
+🎉 **That's it!**  
+Enjoy browsing with a touch of Miku's charm! 💖
