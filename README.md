@@ -1,4 +1,4 @@
-# 🌟 Miku-Tabs
+# Miku-Tabs
 
 Tired of plain old new tabs?  
 **Miku-Tabs** is a Chrome extension that brings a dose of cuteness to your browser with the one and only **Hatsune Miku!** 💙🎶
