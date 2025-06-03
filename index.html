@@ -256,24 +256,24 @@
 
         // Inject code into new-tab.html iframe as before
         const iframe = document.getElementById('newTabFrame');
-        iframe.addEventListener('load', () => {
-            try {
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                const script = iframeDoc.createElement('script');
-                script.textContent = `
-                    console.log('Injected code running inside new-tab.html uwu~');
-                    document.body.style.backgroundColor = '#ffe0f0';
-                    const p = document.createElement('p');
-                    p.textContent = 'This text is injected dynamically uwu!';
-                    p.style.color = '#d14';
-                    p.style.fontWeight = 'bold';
-                    document.body.appendChild(p);
-                `;
-                iframeDoc.head.appendChild(script);
-            } catch (e) {
-                console.error('Failed to inject script:', e);
-            }
-        });
+        // iframe.addEventListener('load', () => {
+        //     try {
+        //         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        //         const script = iframeDoc.createElement('script');
+        //         script.textContent = `
+        //             console.log('Injected code running inside new-tab.html uwu~');
+        //             document.body.style.backgroundColor = '#ffe0f0';
+        //             const p = document.createElement('p');
+        //             p.textContent = 'This text is injected dynamically uwu!';
+        //             p.style.color = '#d14';
+        //             p.style.fontWeight = 'bold';
+        //             document.body.appendChild(p);
+        //         `;
+        //         iframeDoc.head.appendChild(script);
+        //     } catch (e) {
+        //         console.error('Failed to inject script:', e);
+        //     }
+        // });
 
         const customMenu = document.getElementById('customContextMenu');
 
