@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Miku-Tabs - New tab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Font Awesome CDN for icons uwu~ -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        iframe#newTabFrame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            z-index: 1;
+        }
+
+        /* Button on top with your image */
+        #popupButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            width: 48px;
+            height: 48px;
+        }
+
+        #popupButton img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
+            transition: transform 0.2s ease;
+        }
+
+        #popupButton:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Popup overlay */
+        #popupOverlay {
+            display: none;
+            position: fixed;
+            top: 20vh;
+            left: 50vw;
+            transform: translate(-50%, 0);
+            background: white;
+            border: 2px solid rgb(19, 122, 127, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(14, 12, 12, 0.3);
+            z-index: 20;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow: hidden;
+            resize: both;
+        }
+
+        /* Header for dragging */
+        #popupHeader {
+            cursor: move;
+            background: rgb(19, 122, 127, 0.8);
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            user-select: none;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Close button with Font Awesome - no red circle, just icon */
+        #closePopup {
+            background: transparent;
+            border: none;
+            color: rgba(14, 12, 12, 0.5); /* keep the cute red color for the icon */
+            font-weight: bold;
+            font-size: 22px;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            line-height: 28px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            box-shadow: none; /* remove shadow */
+            border-radius: 0; /* no rounding */
+        }
+
+        #closePopup:hover {
+            color: rgba(14, 12, 12, 0.8); /* darker red on hover */
+            background: transparent;
+        }
+
+        #popupOverlay iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            display: block;
+        }
+
+        /* Custom context menu styles */
+        #customContextMenu {
+            position: fixed;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border-radius: 6px;
+            padding: 6px 0;
+            display: none;
+            z-index: 1000;
+            width: 150px;
+            font-family: Arial, sans-serif;
+        }
+
+        #customContextMenu div {
+            padding: 8px 16px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        #customContextMenu div:hover {
+            background-color: #4A90E2;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="popupButton" aria-label="Open popup">
+        <img src="./images/icon.png" alt="Open popup icon" />
+    </button>
+
+    <div id="customContextMenu" role="menu" aria-hidden="true">
+        <div id="exportData">Export Data</div>
+        <div id="importData">Import Data</div>
+    </div>    
+
+    <iframe id="newTabFrame" src="./new-tab.html"></iframe>
+
+    <div id="popupOverlay" role="dialog" aria-modal="true" aria-label="Popup window">
+        <div id="popupHeader">
+            <span>Miku-Tabs - Settings</span>
+            <button id="closePopup" aria-label="Close popup">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <iframe id="popupIframe" src="./popup.html" scrolling="no"></iframe>
+    </div>
+
+    <script>
+        const popupButton = document.getElementById('popupButton');
+        const popupOverlay = document.getElementById('popupOverlay');
+        const closePopup = document.getElementById('closePopup');
+        const popupIframe = document.getElementById('popupIframe');
+        const popupHeader = document.getElementById('popupHeader');
+
+        // Show popup
+        popupButton.addEventListener('click', () => {
+            popupOverlay.style.display = 'block';
+            centerPopup();
+            adjustIframeHeight();
+        });
+
+        // Close popup and refresh page
+        closePopup.addEventListener('click', () => {
+            popupOverlay.style.display = 'none';
+            location.reload();
+        });
+
+        // Adjust iframe height based on content
+        function adjustIframeHeight() {
+            try {
+                const iframeDoc = popupIframe.contentDocument || popupIframe.contentWindow.document;
+                if (!iframeDoc) return;
+
+                popupIframe.onload = () => {
+                    const height = iframeDoc.body.scrollHeight;
+                    const width = iframeDoc.body.scrollWidth;
+
+                    popupIframe.style.height = height + 'px';
+                    popupOverlay.style.width = (width + 32) + 'px'; // adding some padding
+                };
+            } catch (e) {
+                console.warn('Cannot access iframe content to adjust height, probably cross-origin uwu~', e);
+            }
+        }
+
+        // Draggable popup code
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        popupHeader.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            const rect = popupOverlay.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            document.body.style.userSelect = 'none'; // prevent text selection while dragging
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            document.body.style.userSelect = '';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            let newLeft = e.clientX - offsetX;
+            let newTop = e.clientY - offsetY;
+
+            // Keep popup inside viewport
+            const maxLeft = window.innerWidth - popupOverlay.offsetWidth;
+            const maxTop = window.innerHeight - popupOverlay.offsetHeight;
+
+            if (newLeft < 0) newLeft = 0;
+            if (newTop < 0) newTop = 0;
+            if (newLeft > maxLeft) newLeft = maxLeft;
+            if (newTop > maxTop) newTop = maxTop;
+
+            popupOverlay.style.left = newLeft + 'px';
+            popupOverlay.style.top = newTop + 'px';
+            popupOverlay.style.transform = 'none'; // disable centering transform while dragging
+        });
+
+        // Center popup on screen when opened
+        function centerPopup() {
+            popupOverlay.style.left = '50%';
+            popupOverlay.style.top = '20vh';
+            popupOverlay.style.transform = 'translateX(-50%)';
+        }
+
+        // Also adjust iframe height when it loads or resizes
+        popupIframe.addEventListener('load', adjustIframeHeight);
+
+        // Inject code into new-tab.html iframe as before
+        const iframe = document.getElementById('newTabFrame');
+        iframe.addEventListener('load', () => {
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const script = iframeDoc.createElement('script');
+                script.textContent = `
+                    console.log('Injected code running inside new-tab.html uwu~');
+                    document.body.style.backgroundColor = '#ffe0f0';
+                    const p = document.createElement('p');
+                    p.textContent = 'This text is injected dynamically uwu!';
+                    p.style.color = '#d14';
+                    p.style.fontWeight = 'bold';
+                    document.body.appendChild(p);
+                `;
+                iframeDoc.head.appendChild(script);
+            } catch (e) {
+                console.error('Failed to inject script:', e);
+            }
+        });
+
+        const customMenu = document.getElementById('customContextMenu');
+
+        popupButton.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+
+            const menuWidth = customMenu.offsetWidth || 150; // fallback width if not rendered yet
+            let leftPos = e.clientX - menuWidth;
+
+            // Prevent menu going off the left edge of the viewport
+            if (leftPos < 0) {
+                leftPos = 0;
+            }
+
+            customMenu.style.top = e.clientY + 'px';
+            customMenu.style.left = leftPos + 'px';
+            customMenu.style.display = 'block';
+            customMenu.setAttribute('aria-hidden', 'false');
+        });
+
+
+        // Hide menu on click anywhere else
+        window.addEventListener('click', () => {
+            if (customMenu.style.display === 'block') {
+                customMenu.style.display = 'none';
+                customMenu.setAttribute('aria-hidden', 'true');
+            }
+        });
+
+        // Handle menu item clicks
+        customMenu.addEventListener('click', (e) => {
+            if (e.target.id === 'exportData') {
+                window.open('./data/export.html', '_blank');
+            } else if (e.target.id === 'importData') {
+                window.open('./data/import.html', '_blank');
+            }
+            customMenu.style.display = 'none';
+            customMenu.setAttribute('aria-hidden', 'true');
+        });
+    </script>
+</body>
+
+</html>
