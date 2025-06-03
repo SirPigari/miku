@@ -52,7 +52,10 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem('searchEngine', searchEngineValue);
 
         if (backgroundImageSelect.value === 'custom') {
-            localStorage.setItem('customBackgroundImage', customBgInput.value);
+            const rawPath = customBgInput.value.replace(/\\/g, '\\\\');
+            localStorage.setItem('customBackgroundImage', rawPath);
+        } else {
+            localStorage.removeItem('customBackgroundImage');
         }
 
         updateStatus();
@@ -66,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         this.location.reload();
     });
+    
 
     resetBtn.addEventListener('click', () => {
         const savedShortcuts = localStorage.getItem("shortcuts");
@@ -113,14 +117,19 @@ document.addEventListener("DOMContentLoaded", function() {
     backgroundImageSelect.addEventListener('change', () => {
         if (backgroundImageSelect.value === 'custom') {
             customBgContainer.style.display = 'block';
-            customBgInput.value = localStorage.getItem('customBackgroundImage') || '';
+
+            let saved = localStorage.getItem('customBackgroundImage') || '';
+            saved = saved.replace(/\\/g, '\\\\');
+            customBgInput.value = saved;
+
         } else {
             customBgContainer.style.display = 'none';
         }
 
-        if (localStorage.getItem('customBackgroundImage') == '') {
+        if (!localStorage.getItem('customBackgroundImage')) {
             if (backgroundImageSelect.value === 'custom') {
-                localStorage.setItem('customBackgroundImage', customBgInput.value || 'custom.png');
+                const val = customBgInput.value.replace(/\\/g, '\\\\') || 'custom.png';
+                localStorage.setItem('customBackgroundImage', val);
             } else {
                 localStorage.removeItem('customBackgroundImage');
             }
@@ -128,6 +137,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         updateStatus();
     });
+    
     
     function updateStatus() {
         let backgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
