@@ -179,6 +179,14 @@ datalist option:hover {
     flex-direction: column;
 }
 
+.modal-content h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 .modal-buttons {
     display: flex;
     justify-content: space-between;
@@ -212,6 +220,7 @@ datalist option:hover {
     border-radius: 5px;
     border: 1px solid #ccc;
     margin-bottom: 15px;
+    margin-top: 5px;
     outline: none;
     transition: 0.3s;
     background-color: #f9f9f9;
@@ -261,63 +270,100 @@ datalist option:hover {
 }
 
 @media screen and (max-width: 768px) and (orientation: portrait) {
-
-    .search-container {
-        display: flex;
+    body {
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 100%;
-        margin-top: -100px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    html {
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    #about-button {
+        display: none;
+    }
+
+    .search-bar {
+        max-width: 80vw;
     }
 
     #logo {
-        width: 90%;
-        margin-top: -100px;
-        margin-bottom: -4px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .search-bar-container {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-}
-
-@media screen and (max-width: 768px) and (orientation: landscape) {
-    .search-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100vw;
-        margin-top: -300px;
-    }
-
-    .search-bar-container {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
+        width: 100%;
+        max-width: 400px;
+        margin-bottom: -2px;
+        margin-left: 5px;
     }
 
     .modal {
-        width: 90vw;
-        padding: 10px;
+        width: 85vw;
+        height: auto;
+        padding: 20px;
+    }
+}
+
+@media screen and (max-height: 768px) and (orientation: landscape) {
+    body {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+    
+    html {
+        overflow-x: hidden;
+        overflow-y: hidden;
     }
 
-    #logo {
-        margin-top: 200px;
-        width: 60vw;
-        margin-bottom: -4px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
+    #about-button {
+        display: none;
     }
-
-
+    
     .search-bar {
-        width: 45vw;
+        max-width: 80vw;
+        height: 25px;
+    }
+
+    .shortcuts-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .shortcut {
+        width: 70px;
+        height: 70px;
+        border-radius: 15px;
+        margin-top: -15px;
+    }
+
+    .shortcut img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .shortcut-options {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+    }
+    
+    #logo {
+        width: 80%;
+        max-width: 350px;
+        margin-bottom: -2px;
+        margin-left: 5px;
+        margin-top: 35vw;
+    }
+    
+    .modal {
+        width: 80vw;
+        height: auto;
+        padding: 20px;
+        margin-top: 20vh;
     }
 }
