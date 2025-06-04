@@ -1,4 +1,4 @@
-const current_sha = '0af215ac43bafdae6f8897bd221c382a3b90c34e';
+const current_sha = '9913ba079af5c6635ab2570e8af594a3ceaae7f8';
 
 window.onload = async function () {
     loadShortcuts();
@@ -31,6 +31,11 @@ window.onload = async function () {
     const isValidSha = sha => /^[0-9a-f]{40}$/i.test(sha);
 
     let sha = localStorage.getItem("commit_sha");
+    if (sha != current_sha) {
+        sha = current_sha;
+        localStorage.setItem("commit_sha", current_sha);
+    }
+
     if (!sha) {
         sha = current_sha;
         localStorage.setItem("commit_sha", sha);
