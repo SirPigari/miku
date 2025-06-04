@@ -53,11 +53,12 @@ window.onload = async function () {
         const latestSha = commits[0]?.sha;
         const secondLatestSha = commits[1]?.sha;
 
+        console.log("Your local commit SHA:", sha);
+        console.log("Latest commit SHA on GitHub:", latestSha);
+        console.log("Second latest commit SHA on GitHub:", secondLatestSha);
+
         if (sha !== latestSha && sha !== secondLatestSha && sha !== "null") {
             showStatusMessage("Your extension is not up to date!", "fas fa-exclamation-triangle");
-            console.log("Your local commit SHA:", sha);
-            console.log("Latest commit SHA on GitHub:", latestSha);
-            console.log("Second latest commit SHA on GitHub:", secondLatestSha);
         } else {
             console.log("Your local commit is up to date.");
         }
