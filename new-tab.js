@@ -1,4 +1,4 @@
-const current_sha = "515a70a08cea67e92453a5fded71c320e9c0545a";
+const current_sha = '0af215ac43bafdae6f8897bd221c382a3b90c34e';
 
 window.onload = async function () {
     loadShortcuts();
