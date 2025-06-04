@@ -1,4 +1,4 @@
-const CURRENT_COMMIT_SHA = '2376b4318f191d8274a381c79977fe63521a43bc';
+const current_sha = "515a70a08cea67e92453a5fded71c320e9c0545a";
 
 window.onload = async function () {
     loadShortcuts();
