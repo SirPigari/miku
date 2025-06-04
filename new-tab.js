@@ -1,36 +1,77 @@
-window.onload = function() {
+const current_sha = "515a70a08cea67e92453a5fded71c320e9c0545a";
+
+window.onload = async function () {
     loadShortcuts();
+
     let backgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
     if (localStorage.getItem('backgroundEnabled') !== 'true') {
-        backgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
         if (backgroundImage === 'custom') {
             backgroundImage = localStorage.getItem('customBackgroundImage') || 'custom.png';
         }
 
         if (backgroundImage === 'none') {
             document.body.style.backgroundImage = 'none';
-            return;
-        }
-        backgroundImage = `./images/${backgroundImage}`;
-
-        let customBackgroundImage = localStorage.getItem('customBackgroundImage');
-        if (customBackgroundImage && customBackgroundImage != '') {
-            backgroundImage = customBackgroundImage;
+        } else {
+            let customBackgroundImage = localStorage.getItem('customBackgroundImage');
+            if (customBackgroundImage && customBackgroundImage !== '') {
+                backgroundImage = customBackgroundImage;
+            } else {
+                backgroundImage = `./images/${backgroundImage}`;
+            }
+            document.body.style.backgroundImage = `url(${backgroundImage})`;
+            document.body.style.backgroundRepeat = 'no-repeat';
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
         }
     }
-    
 
-    document.body.style.backgroundImage = `url(${backgroundImage})`;
-    document.body.style.backgroundRepeat = 'no-repeat';
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
+    // SHA check logic
+    console.log("Checking for updates at " + new Date().toISOString());
+
+    const isValidSha = sha => /^[0-9a-f]{40}$/i.test(sha);
+
+    let sha = localStorage.getItem("commit_sha");
+    if (!sha) {
+        sha = current_sha;
+        localStorage.setItem("commit_sha", sha);
+    }
+
+    if (!isValidSha(sha) && sha !== "null") {
+        showStatusMessage("Invalid commit SHA found in localStorage! Resetting to null.", "fas fa-exclamation-triangle");
+        localStorage.setItem("commit_sha", null);
+        return;
+    }
+
+    const repoOwner = "SirPigari";
+    const repoName = "miku";
+    const branch = "main";
+
+    try {
+        const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/commits?sha=${branch}`);
+        const commits = await response.json();
+
+        const latestSha = commits[0]?.sha;
+        const secondLatestSha = commits[1]?.sha;
+
+        if (sha !== latestSha && sha !== secondLatestSha && sha !== "null") {
+            showStatusMessage("Your extension is not up to date!", "fas fa-exclamation-triangle");
+            console.log("Your local commit SHA:", sha);
+            console.log("Latest commit SHA on GitHub:", latestSha);
+            console.log("Second latest commit SHA on GitHub:", secondLatestSha);
+        } else {
+            console.log("Your local commit is up to date.");
+        }
+    } catch (err) {
+        showStatusMessage("Failed to fetch remote commits: " + err.message, "fas fa-exclamation-triangle");
+    }
 };
 
-document.addEventListener('DOMContentLoaded', function() {
+
+document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('searchForm');
     const submitButton = form.querySelector('button[type="submit"]');
 
-    submitButton.addEventListener('mouseover', function() {
+    submitButton.addEventListener('mouseover', function () {
         const query = document.querySelector('input[name="q"]').value.trim();
 
         if (!query) {
@@ -40,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         const query = document.querySelector('input[name="q"]').value.trim();
 
         if (!query) {
@@ -48,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    submitButton.addEventListener('click', function(event) {
+    submitButton.addEventListener('click', function (event) {
         const query = document.querySelector('input[name="q"]').value.trim();
 
         if (!query) {
@@ -62,11 +103,11 @@ function loadShortcuts() {
     const shortcutsContainer = document.querySelector('.shortcuts-container');
     shortcutsContainer.innerHTML = '';
     let shortcuts = JSON.parse(localStorage.getItem('shortcuts')) || [];
-    
+
     shortcuts.forEach((shortcut, index) => {
         addShortcutElement(shortcut, index);
     });
-    
+
     if (shortcuts.length < 10) {
         addAddButton();
     }
@@ -138,23 +179,23 @@ function openShortcutModal(index) {
     let nameInput = document.getElementById('shortcut-name');
     let urlInput = document.getElementById('shortcut-url');
     let saveButton = document.getElementById('save-shortcut');
-    
+
     if (index !== null) {
         document.getElementById('modal-title').innerText = 'Edit Shortcut';
         nameInput.value = shortcuts[index].name;
         urlInput.value = shortcuts[index].url;
-        saveButton.onclick = function() {
+        saveButton.onclick = function () {
             editShortcut(index);
         };
     } else {
         document.getElementById('modal-title').innerText = 'Add Shortcut';
         nameInput.value = '';
         urlInput.value = '';
-        saveButton.onclick = function() {
+        saveButton.onclick = function () {
             addShortcut();
         };
     }
-    
+
     modal.style.display = 'block';
 }
 
@@ -165,19 +206,19 @@ function deleteShortcut(index) {
     loadShortcuts();
 }
 
-document.getElementById('cancel-shortcut').onclick = function() {
+document.getElementById('cancel-shortcut').onclick = function () {
     document.getElementById('shortcut-modal').style.display = 'none';
 };
 
 function addShortcut() {
     let name = document.getElementById('shortcut-name').value.trim();
     let url = document.getElementById('shortcut-url').value.trim();
-    
+
     if (name && url) {
         if (!url.startsWith('http://') && !url.startsWith('https://')) {
             url = 'https://' + url;
         }
-        
+
         let shortcuts = JSON.parse(localStorage.getItem('shortcuts')) || [];
         shortcuts.push({ name, url });
         localStorage.setItem('shortcuts', JSON.stringify(shortcuts));
@@ -195,19 +236,41 @@ function editShortcut(index) {
     loadShortcuts();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+function showStatusMessage(message, iconClass = 'fas fa-info-circle') {
+    const statusText = document.getElementById('status-text');
+
+    statusText.style.display = 'flex'; // make sure it's shown
+    statusText.innerHTML = `
+        <i class="${iconClass}"></i>
+        <span>${message}</span>
+        <div id="status-progress"></div>
+    `;
+    statusText.classList.add('show');
+
+    // After 2.5s + transition delay (buffer), hide and display:none
+    setTimeout(() => {
+        statusText.classList.remove('show');
+        setTimeout(() => {
+            statusText.style.display = 'none';
+        }, 400); // match CSS transition time
+    }, 2500);
+}
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('searchForm');
     const searchInput = form.querySelector('input[name="q"]');
     const submitButton = form.querySelector('button[type="submit"]');
 
     let savedSearchEngine = localStorage.getItem('searchEngine') || 'https://www.google.com/search?q=%s';
 
-    submitButton.addEventListener('mouseover', function() {
+    submitButton.addEventListener('mouseover', function () {
         const query = searchInput.value.trim();
         submitButton.style.cursor = query ? 'pointer' : 'default';
     });
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         const query = searchInput.value.trim();
 
         if (!query) {
@@ -221,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = searchURL;
     });
 
-    submitButton.addEventListener('click', function(event) {
+    submitButton.addEventListener('click', function (event) {
         const query = searchInput.value.trim();
         if (!query) {
             event.preventDefault();

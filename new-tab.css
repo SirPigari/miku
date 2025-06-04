@@ -141,7 +141,7 @@ datalist option:hover {
 
 .shortcut-options button:hover {
     color: rgba(51, 51, 51, 1);
-}        
+}
 
 .shortcut-options .delete-button i {
     font-size: 12px;
@@ -262,6 +262,57 @@ datalist option:hover {
     background-color: rgba(19, 122, 127, 0.8);
 }
 
+#status-text {
+    position: fixed;
+    top: 20px;
+    left: -350px;
+    max-width: 320px;
+    background-color: #ffffff;
+    color: #333;
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    z-index: 9999;
+    transition: left 0.4s ease-in-out;
+    border: 1px solid #ddd;
+    overflow: hidden;
+}
+
+#status-text.show {
+    left: 20px;
+}
+
+#status-text i {
+    font-size: 18px;
+    color: rgba(19, 122, 127, 0.8);
+}
+
+#status-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: rgba(19, 122, 127, 0.8);
+    animation: progressBar 2.5s linear forwards;
+    width: 100%;
+    border-radius: 0 0 12px 12px;
+}
+
+@keyframes progressBar {
+    from {
+        width: 100%;
+    }
+
+    to {
+        width: 0%;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     * {
         animation: none !important;
@@ -313,7 +364,7 @@ datalist option:hover {
         overflow-x: hidden;
         overflow-y: hidden;
     }
-    
+
     html {
         overflow-x: hidden;
         overflow-y: hidden;
@@ -322,7 +373,7 @@ datalist option:hover {
     #about-button {
         display: none;
     }
-    
+
     .search-bar {
         max-width: 80vw;
         height: 25px;
@@ -351,7 +402,7 @@ datalist option:hover {
         top: 4px;
         right: 4px;
     }
-    
+
     #logo {
         width: 80%;
         max-width: 350px;
@@ -359,7 +410,7 @@ datalist option:hover {
         margin-left: 5px;
         margin-top: 35vw;
     }
-    
+
     .modal {
         width: 80vw;
         height: auto;

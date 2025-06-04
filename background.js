@@ -18,11 +18,17 @@ chrome.runtime.onInstalled.addListener(() => {
     type: "separator",
     contexts: ["all"]
   });
-  
+
 
   chrome.contextMenus.create({
     id: "refreshTabs",
     title: "Refresh all miku-tabs",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "resetSha",
+    title: "Reset commit SHA",
     contexts: ["action"]
   });
 });
@@ -56,6 +62,11 @@ chrome.contextMenus.onClicked.addListener((info) => {
           });
         }
       });
+    });
+  }
+  if (info.menuItemId === "resetSha") {
+    chrome.tabs.create({
+      url: chrome.runtime.getURL("data/reset_sha.html")
     });
   }
 });

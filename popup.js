@@ -8,7 +8,7 @@ const engines = [
     { label: 'Custom', value: 'custom' }
 ];
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const backgroundImageSelect = document.getElementById('backgroundImageSelect');
     const searchEngineSelect = document.getElementById('searchEngineSelect');
     const customSearchContainer = document.getElementById('customSearchContainer');
@@ -69,15 +69,19 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         this.location.reload();
     });
-    
+
 
     resetBtn.addEventListener('click', () => {
         const savedShortcuts = localStorage.getItem("shortcuts");
+        const commitSha = localStorage.getItem("commit_sha");
 
         localStorage.clear();
 
         if (savedShortcuts !== null) {
             localStorage.setItem("shortcuts", savedShortcuts);
+        }
+        if (commitSha !== null) {
+            localStorage.setItem("commit_sha", commitSha);
         }
 
         localStorage.removeItem('backgroundImage');
@@ -137,8 +141,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         updateStatus();
     });
-    
-    
+
+
     function updateStatus() {
         let backgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
         let searchEngine = localStorage.getItem('searchEngine');
@@ -172,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function() {
             option.textContent = image;
             backgroundImageSelect.appendChild(option);
         });
-        
+
         const savedbackgroundImage = localStorage.getItem('backgroundImage') || 'miku_normal.png';
         const savedCustomImage = localStorage.getItem('customBackgroundImage');
 
